@@ -1,17 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nueva Tarea</ion-title>
+    <ion-title>Crear Tarea</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <form (ngSubmit)="submitForm()" [formGroup]="taskForm">
     <ion-item>
-      <ion-label position="floating">Nombre de la tarea</ion-label>
-      <ion-input formControlName="title" required></ion-input>
+      <ion-input
+        formControlName="title"
+        label="Titulo"
+        placeholder="Ej.: Revisar Emails"
+      ></ion-input>
     </ion-item>
 
-    <ion-button expand="block" type="submit" [disabled]="taskForm.invalid">
+    <ion-button
+      class="custom-button"
+      expand="block"
+      type="submit"
+      [disabled]="taskForm.invalid"
+    >
       Guardar
     </ion-button>
   </form>

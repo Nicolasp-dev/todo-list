@@ -1,0 +1,20 @@
+.custom-input {
+  --background: var(--ion-color-primary-fade);
+  --color: var(--ion-color-primary-contrast);
+  --placeholder-color: var(--ion-color-primary-contrast);
+  border: none;
+
+  border-radius: 8px;
+}
+
+ion-button {
+  --background: var(--ion-color-tertiary-contrast);
+  --border-radius: 0.5rem;
+  --color: var(--base-color);
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+}
+
+.custom-button {
+  padding: 0.5rem 0;
+}

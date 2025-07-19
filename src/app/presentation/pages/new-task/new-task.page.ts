@@ -21,16 +21,17 @@ export class NewTaskPage {
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.taskForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required]],
     });
   }
 
   submitForm() {
     if (this.taskForm.valid) {
-      const newTask = this.taskForm.value;
-      console.log('Nueva tarea:', newTask);
-      // Aquí puedes guardar la tarea o redirigir
-      this.router.navigate(['/home']);
+      const task = {
+        ...this.taskForm.value,
+        completed: false,
+      };
+      console.log('Nueva tarea:', task);
     }
   }
 }
