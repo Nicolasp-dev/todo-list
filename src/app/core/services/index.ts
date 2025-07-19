@@ -1,2 +1,2 @@
-export * from './todo.repository';
-export * from './todo.repository.token';
+export * from './task.repository';
+export * from './task.repository.token';

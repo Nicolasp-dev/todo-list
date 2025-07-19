@@ -6,8 +6,8 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { TODO_REPOSITORY } from '@core/services';
-import { TodoMockRepository } from '@data/repositories';
+import { TASK_REPOSITORY } from '@core/services';
+import { TasksMockRepository } from '@data/repositories';
 import { CORE_USE_CASE_PROVIDERS } from '@core/domain/use-cases';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { CORE_USE_CASE_PROVIDERS } from '@core/domain/use-cases';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: TODO_REPOSITORY, useClass: TodoMockRepository },
+    { provide: TASK_REPOSITORY, useClass: TasksMockRepository },
     ...CORE_USE_CASE_PROVIDERS,
   ],
   bootstrap: [AppComponent],

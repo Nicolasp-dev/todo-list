@@ -1,11 +1,11 @@
 import { Provider } from '@angular/core';
-import { GetTodosUseCase } from '@core/domain';
-import { TODO_REPOSITORY } from '@core/services';
+import { GetTasksUseCase } from '@core/domain';
+import { TASK_REPOSITORY } from '@core/services';
 
 export const CORE_USE_CASE_PROVIDERS: Provider[] = [
   {
-    provide: GetTodosUseCase,
-    useFactory: (repository: any) => new GetTodosUseCase(repository),
-    deps: [TODO_REPOSITORY],
+    provide: GetTasksUseCase,
+    useFactory: (repository: any) => new GetTasksUseCase(repository),
+    deps: [TASK_REPOSITORY],
   },
 ];

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { GetTodosUseCase, Todo } from '@core/domain';
+import { GetTasksUseCase, Task } from '@core/domain';
 import { IonicModule } from '@ionic/angular';
 import { TaskItemComponent } from '../../components/ui/molecules/task-item/task-item.component';
 
@@ -11,9 +11,9 @@ import { TaskItemComponent } from '../../components/ui/molecules/task-item/task-
   imports: [IonicModule, TaskItemComponent],
 })
 export class TasksPage {
-  todos = signal<Todo[]>([]);
+  todos = signal<Task[]>([]);
 
-  constructor(private getTodoUseCase: GetTodosUseCase) {}
+  constructor(private getTodoUseCase: GetTasksUseCase) {}
 
   ngOnInit() {
     this.todos.set(this.getTodoUseCase.execute());
