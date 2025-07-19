@@ -10,7 +10,7 @@ export class TodoMockRepository extends TodoRepository {
     return Array.from({ length: 10 }, (_, i) => ({
       id: i++,
       title: `Task ${i++}`,
-      completed: false,
+      completed: i % 2 ? true : false,
     }));
   }
 }

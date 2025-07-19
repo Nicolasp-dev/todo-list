@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 1rem;
+  border: 1px solid var(--ion-color-primary-contrast);
+  border-radius: 5px;
+  font-weight: bold;
+  color: var(--ion-text-color);
+  grid-column: span 4;
+  transition: background-color 0.3s ease, text-decoration 0.3s ease,
+    border 0.3s ease;
+}
+
+:host.task-item--checked {
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
+  text-decoration: line-through;
+}
+
+.task-item__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.task-item__icon {
+  font-size: 1.7rem;
+  color: var(--ion-text-color);
+  transition: color 0.3s ease;
+}

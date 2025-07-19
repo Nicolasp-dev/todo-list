@@ -1,21 +1,22 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header [translucent]="true" color="light">
+  <ion-toolbar color="light">
     <ion-title> To Do List </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <h2>Mis Tareas</h2>
-  <ul>
-    <li *ngFor="let todo of todos">
-      <input type="checkbox" [checked]="todo.completed" disabled />
-      {{ todo.title }}
-    </li>
-  </ul>
+  <div class="grid-container">
+    @for (todo of todos(); track todo.id) {
+    <app-task-item
+      [title]="todo.title"
+      [checked]="!!todo.completed"
+      (checkedChange)="toggleTodoChecked(todo.id, $event)"
+    ></app-task-item>
+    }
+  </div>
 </ion-content>
