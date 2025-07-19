@@ -8,22 +8,6 @@ import { TaskItemComponent } from '../../components/ui/molecules/task-item/task-
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, TaskItemComponent],
+  imports: [IonicModule],
 })
-export class HomePage {
-  todos = signal<Todo[]>([]);
-
-  constructor(private getTodoUseCase: GetTodosUseCase) {}
-
-  ngOnInit() {
-    this.todos.set(this.getTodoUseCase.execute());
-  }
-
-  toggleTodoChecked(id: number, newValue: boolean) {
-    const current = this.todos();
-    const updated = current.map((t) =>
-      t.id === id ? { ...t, completed: newValue } : t
-    );
-    this.todos.set(updated);
-  }
-}
+export class HomePage {}

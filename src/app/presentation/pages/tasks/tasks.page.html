@@ -1,0 +1,22 @@
+<ion-header [translucent]="true" color="light">
+  <ion-toolbar color="light">
+    <ion-title> Mis Tareas </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="light">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Blank</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="grid-container">
+    @for (todo of todos(); track todo.id) {
+    <app-task-item
+      [title]="todo.title"
+      [checked]="!!todo.completed"
+      (checkedChange)="toggleTodoChecked(todo.id, $event)"
+    ></app-task-item>
+    }
+  </div>
+</ion-content>

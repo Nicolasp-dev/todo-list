@@ -1,22 +1,20 @@
-<ion-header [translucent]="true" color="light">
-  <ion-toolbar color="light">
-    <ion-title> To Do List </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" color="light">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <div class="grid-container">
-    @for (todo of todos(); track todo.id) {
-    <app-task-item
-      [title]="todo.title"
-      [checked]="!!todo.completed"
-      (checkedChange)="toggleTodoChecked(todo.id, $event)"
-    ></app-task-item>
-    }
-  </div>
-</ion-content>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="tasks">
+      <ion-icon name="albums"></ion-icon>
+      Mis Tareas
+    </ion-tab-button>
+    <ion-tab-button tab="new-task">
+      <ion-icon name="add-circle"></ion-icon>
+      Crear Tarea
+    </ion-tab-button>
+    <ion-tab-button tab="library">
+      <ion-icon name="bookmark"></ion-icon>
+      Crear Tag
+    </ion-tab-button>
+    <ion-tab-button tab="search">
+      <ion-icon name="search"></ion-icon>
+      Buscar
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
