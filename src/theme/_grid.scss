@@ -1,0 +1,17 @@
+$grid-columns: 4;
+$grid-margin: 16px;
+$grid-gutter: 16px;
+$grid-top-padding: 56px;
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat($grid-columns, 1fr);
+  gap: $grid-gutter;
+  padding: $grid-top-padding $grid-margin 0 $grid-margin;
+  box-sizing: border-box;
+}
+
+.grid-item {
+  background-color: rgba(0, 0, 0, 0.05);
+  height: 100px;
+}
