@@ -20,7 +20,7 @@ export const NewTaskConfig = Object.freeze({
     expand: 'block',
     text: 'Guardar',
   },
-  emptyTasks: {
+  emptyCategories: {
     description:
       ' Aún no tienes categorías. Crea una para ayudarte a organizar mejor tus tareas',
   },
