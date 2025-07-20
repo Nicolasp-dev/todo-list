@@ -8,6 +8,11 @@ const routes: Routes = [
       import('./presentation/pages/home/home.page').then((m) => m.HomePage),
     children: [
       {
+        path: '',
+        redirectTo: 'tasks',
+        pathMatch: 'full',
+      },
+      {
         path: 'tasks',
         loadComponent: () =>
           import('./presentation/pages/tasks/tasks.page').then(
