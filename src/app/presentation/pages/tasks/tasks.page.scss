@@ -39,6 +39,10 @@
   justify-self: end;
   border-radius: 0.5rem;
 
+  &.no-justify {
+    justify-self: auto;
+  }
+
   ion-icon {
     font-size: 25px;
     color: var(--base-color);

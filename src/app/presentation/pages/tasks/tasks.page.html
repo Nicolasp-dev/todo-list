@@ -6,8 +6,10 @@
 
 <ion-content class="ion-padding" [fullscreen]="true">
   <div class="grid-container">
+    @if (isCategoryFilterEnabled) {
     <ion-item class="search-bar">
       <ion-icon name="search" slot="start"></ion-icon>
+
       <ion-input
         type="text"
         placeholder="Buscar por categoría..."
@@ -15,9 +17,11 @@
         (ionInput)="onSearchCategory($event)"
       ></ion-input>
     </ion-item>
+    }
 
     <ion-button
       class="custom-button"
+      [ngClass]="{ 'no-justify': !isCategoryFilterEnabled }"
       [disabled]="!hasCheckedTasks()"
       (click)="deleteTasks()"
     >

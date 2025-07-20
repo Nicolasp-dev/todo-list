@@ -26,7 +26,7 @@
     "paths": {
       "@core/*": ["src/app/core/*"],
       "@data/*": ["src/app/data/*"],
-      "@ui/*": ["src/app/presentation/components/ui/*"]
+      "@presentation/*": ["src/app/presentation/*"],
     }
   },
   "angularCompilerOptions": {

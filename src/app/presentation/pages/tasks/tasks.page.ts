@@ -2,23 +2,27 @@ import { DeleteCompletedTasksUseCase } from '@core/domain';
 import { Component, computed, signal } from '@angular/core';
 import { GetTasksUseCase, SaveTasksUseCase, Task } from '@core/domain';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { TaskItemComponent } from '@ui/molecules/task-item/task-item.component';
+import { TaskItemComponent } from '@presentation/components/ui';
 import { NewTaskPage } from '../new-task/new-task.page';
+import { NgClass } from '@angular/common';
+import { FeatureFlagsService } from '@presentation/state';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'tasks.page.html',
   styleUrls: ['tasks.page.scss'],
   standalone: true,
-  imports: [IonicModule, TaskItemComponent],
+  imports: [IonicModule, TaskItemComponent, NgClass],
 })
 export class TasksPage {
   public readonly todos = signal<Task[]>([]);
+  public isCategoryFilterEnabled!: boolean;
 
   constructor(
     private readonly getTasksUseCase: GetTasksUseCase,
     private readonly saveTasksUseCase: SaveTasksUseCase,
     private readonly deleteCompletedTasksUseCase: DeleteCompletedTasksUseCase,
+    private featureFlagsService: FeatureFlagsService,
     private modalCtrl: ModalController
   ) {}
 
@@ -27,6 +31,8 @@ export class TasksPage {
   }
 
   public ionViewWillEnter(): void {
+    this.isCategoryFilterEnabled =
+      this.featureFlagsService.categoryFilterEnabled();
     this.loadTasks();
   }
 
