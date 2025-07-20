@@ -1,1 +1,1 @@
-export * from './todo-mock.repository';
+export * from './local-tasks.repository';

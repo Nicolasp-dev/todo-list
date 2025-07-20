@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Task } from '@core/domain/models/task.model';
-import { StorageService } from './storage.service';
+import { StorageService } from '@data/datasources/storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class LocalTasksDatasource {

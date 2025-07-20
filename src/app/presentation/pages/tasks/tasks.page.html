@@ -5,25 +5,19 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div class="grid-container">
     <ion-item class="search-bar">
       <ion-icon name="search" slot="start"></ion-icon>
       <ion-input type="text" placeholder="Buscar..." clearInput></ion-input>
     </ion-item>
 
-    <ion-tab-button
-      class="custom-tab-button"
+    <ion-button
+      class="custom-button"
       [disabled]="!hasCheckedTasks()"
       (click)="deleteTasks()"
     >
       <ion-icon name="trash"></ion-icon>
-    </ion-tab-button>
+    </ion-button>
 
     @for (todo of todos(); track todo.id) {
     <app-task-item

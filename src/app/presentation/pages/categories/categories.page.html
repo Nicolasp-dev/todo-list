@@ -1,0 +1,49 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Categorías</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen>
+  <div class="header">
+    <h3>Mis Categorias</h3>
+
+    <ion-button class="option-button" (click)="toggleEditMode()">
+      <ion-icon name="settings"></ion-icon>
+    </ion-button>
+
+    <ion-button class="option-button">
+      <ion-icon name="checkbox"></ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-chip *ngFor="let category of categories(); trackBy: trackById">
+    {{ category.title }}
+    <ion-icon
+      *ngIf="editMode()"
+      name="close-outline"
+      slot="end"
+      class="chip-remove"
+      (click)="toggleCategoryForDeletion(category.id)"
+    ></ion-icon>
+  </ion-chip>
+
+  <form (ngSubmit)="addCategory()" [formGroup]="form">
+    <ion-item>
+      <ion-input
+        formControlName="title"
+        label="Titulo"
+        placeholder="Ej.: Deportes"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      class="submit-button"
+      expand="block"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Guardar
+    </ion-button>
+  </form>
+</ion-content>

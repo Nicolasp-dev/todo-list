@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { AppendTaskUseCase } from '@core/domain/use-cases/append-task.use-case';
+import { AppendTaskUseCase } from '@core/domain/use-cases/tasks/append-task.use-case';
 
 interface TaskFormValue {
   title: string;
@@ -23,7 +23,7 @@ interface TaskFormValue {
   styleUrls: ['./new-task.page.scss'],
 })
 export class NewTaskPage {
-  taskForm = this.buildForm();
+  form = this.buildForm();
 
   constructor(
     private fb: NonNullableFormBuilder,
@@ -37,10 +37,11 @@ export class NewTaskPage {
   }
 
   async submitForm() {
-    if (this.taskForm.valid) {
-      const task = this.buildTaks(this.taskForm.getRawValue());
-      await this.appendTaskUseCase.execute(task);
-    }
+    if (this.form.invalid) return;
+
+    const task = this.buildTaks(this.form.getRawValue());
+    await this.appendTaskUseCase.execute(task);
+    this.form.reset();
   }
 
   private buildTaks(form: TaskFormValue): Task {

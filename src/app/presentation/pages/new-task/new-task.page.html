@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="submitForm()" [formGroup]="taskForm">
+  <form (ngSubmit)="submitForm()" [formGroup]="form">
     <ion-item>
       <ion-input
         formControlName="title"
@@ -14,11 +14,22 @@
       ></ion-input>
     </ion-item>
 
+    <!--  <div class="icon-picker">
+      <ion-button
+        *ngFor="let icon of ['pricetag', 'book', 'briefcase', 'fitness']"
+        fill="outline"
+        [color]="selectedIcon === icon ? 'primary' : 'medium'"
+        (click)="selectIcon(icon)"
+      >
+        <ion-icon [name]="icon"></ion-icon>
+      </ion-button>
+    </div> -->
+
     <ion-button
       class="custom-button"
       expand="block"
       type="submit"
-      [disabled]="taskForm.invalid"
+      [disabled]="form.invalid"
     >
       Guardar
     </ion-button>

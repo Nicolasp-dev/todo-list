@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TasksRepository } from '@core/services/tasks.repository';
+import { TasksRepository } from '@core/services/tasks-repository/tasks.repository';
 import { Task } from '@core/domain/models/task.model';
 import { LocalTasksDatasource } from '@data/datasources/local-tasks.datasource';
 

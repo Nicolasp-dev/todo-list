@@ -21,6 +21,13 @@ const routes: Routes = [
             (m) => m.NewTaskPage
           ),
       },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./presentation/pages/categories/categories.page').then(
+            (m) => m.CategoriesPage
+          ),
+      },
     ],
   },
   {
