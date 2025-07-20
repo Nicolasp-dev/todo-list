@@ -1,13 +1,12 @@
-.custom-input {
-  --background: var(--ion-color-primary-fade);
+.input-task {
+  --background: var(--base-color);
   --color: var(--ion-color-primary);
   --placeholder-color: var(--ion-color-primary);
   border: none;
-
   border-radius: 8px;
 }
 
-ion-button {
+.primary-button {
   --background: var(--ion-color-tertiary-contrast);
   --border-radius: 0.5rem;
   --color: var(--base-color);
@@ -15,6 +14,15 @@ ion-button {
   --padding-bottom: 1rem;
 }
 
-.custom-button {
+.button-wrapper {
   padding: 0.5rem 0;
+}
+
+.section-block {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  margin-bottom: 4px;
+  display: block;
 }

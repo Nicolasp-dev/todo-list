@@ -6,41 +6,50 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="form" (ngSubmit)="submitForm()">
-    <ion-label class="ion-padding-top"
-      ><strong>Selecciona una categoría</strong></ion-label
-    >
-    <ion-item>
-      <ion-input
-        formControlName="title"
-        label="Título"
-        placeholder="Ej.: Revisar Emails"
-      ></ion-input>
-    </ion-item>
-
-    <ion-label class="ion-padding-top"
-      ><strong>Selecciona una categoría</strong></ion-label
-    >
-
-    <ion-list>
-      @for (category of categories(); track category.id) {
+    <div class="section-block">
+      <ion-label class="form-label">
+        <strong>{{ config.titles.task }}</strong>
+      </ion-label>
       <ion-item lines="none">
-        <ion-checkbox
-          slot="start"
-          [checked]="selectedCategoryIds().has(category.id)"
-          (ionChange)="toggleCategory(category.id, $event.detail.checked)"
-        ></ion-checkbox>
-        <ion-label>{{ category.title }}</ion-label>
+        <ion-input
+          class="input-task"
+          [formControlName]="config.taskControl.formControlName"
+          [label]="config.taskControl.label"
+          [placeholder]="config.taskControl.placeholder"
+        ></ion-input>
       </ion-item>
+    </div>
+
+    <div class="section-block">
+      <ion-label class="form-label">
+        <strong>{{ config.titles.categories }}</strong>
+      </ion-label>
+
+      @if (categories().length === 0) {
+      <ion-text color="medium"> {{config.emptyTasks.description}} </ion-text>
       }
-    </ion-list>
+
+      <ion-list>
+        @for (category of categories(); track category.id) {
+        <ion-item lines="none">
+          <ion-checkbox
+            [slot]="config.checkbox.slot"
+            [checked]="selectedCategoryIds().has(category.id)"
+            (ionChange)="toggleCategory(category.id, $event.detail.checked)"
+          ></ion-checkbox>
+          <ion-label>{{ category.title }}</ion-label>
+        </ion-item>
+        }
+      </ion-list>
+    </div>
 
     <ion-button
-      class="custom-button"
-      expand="block"
-      type="submit"
-      [disabled]="form.invalid || selectedCategoryIds().size === 0"
+      class="primary-button button-wrapper"
+      [expand]="config.button.expand"
+      [type]="config.button.type"
+      [disabled]="form.invalid"
     >
-      Guardar
+      {{ config.button.text }}
     </ion-button>
   </form>
 </ion-content>

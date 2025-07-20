@@ -1,20 +1,10 @@
-import { Component, Input, signal } from '@angular/core';
-import { Category, Task } from '@core/domain';
-import {
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormControl,
-  NonNullableFormBuilder,
-} from '@angular/forms';
+import { Component, Input, inject } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AppendTaskUseCase } from '@core/domain/use-cases/tasks/append-task.use-case';
-import { GetCategoriesUseCase } from '@core/domain/use-cases/categories';
-
-interface TaskFormValue {
-  title: string;
-}
+import { Task, Category } from '@core/domain';
+import { NewTaskViewModel } from './new-task.view-model';
+import { NewTaskConfig } from './new-task.config';
 
 @Component({
   selector: 'app-new-task',
@@ -22,108 +12,46 @@ interface TaskFormValue {
   imports: [IonicModule, ReactiveFormsModule, CommonModule],
   templateUrl: './new-task.page.html',
   styleUrls: ['./new-task.page.scss'],
+  providers: [NewTaskViewModel],
 })
 export class NewTaskPage {
-  form = this.buildForm();
-  public header: string = '';
   @Input() task!: Task;
-  public categories = signal<Category[]>([]);
-  selectedCategoryId: number | null = null;
-  selectedCategoryIds = signal<Set<number>>(new Set());
+
+  public readonly config = NewTaskConfig;
+  public readonly form = this.vm.form;
+  public readonly categories = this.vm.categories;
+  public readonly selectedCategoryIds = this.vm.selectedCategoryIds;
+  public readonly hasSelectedCategories = this.vm.hasSelectedCategories;
+  public header: string = '';
 
   constructor(
-    private fb: NonNullableFormBuilder,
-    private appendTaskUseCase: AppendTaskUseCase,
     private modalCtrl: ModalController,
-    private readonly getCategoriesUseCase: GetCategoriesUseCase
+    private vm: NewTaskViewModel
   ) {}
 
-  public ngOnInit(): void {
-    this.header = this.task ? 'Editar Tarea' : 'Creat Tarea';
-
-    if (this.task) {
-      this.form.patchValue({ title: this.task.title });
-
-      const existingIds = this.task.categories?.map((c) => c.id) ?? [];
-      this.selectedCategoryIds.set(new Set(existingIds));
-    }
-
-    this.setCategories();
+  ngOnInit(): void {
+    this.setHeader();
+    this.vm.initialize(this.task);
   }
 
-  public ionViewWillEnter() {
-    this.setCategories();
+  ionViewWillEnter() {
+    this.setHeader();
+    this.vm.initialize(this.task);
   }
 
-  private buildForm(): FormGroup<{ title: FormControl<string> }> {
-    return this.fb.group({
-      title: ['', Validators.required],
-    });
-  }
-
-  selectCategory(id: number) {
-    this.selectedCategoryId = id;
-  }
-
-  onCategorySelected(id: number) {
-    this.selectedCategoryId = id;
+  public toggleCategory(id: number, checked: boolean) {
+    this.vm.toggleCategory(id, checked);
   }
 
   public async submitForm(): Promise<void> {
-    if (this.form.invalid) return;
-
-    const title = this.form.getRawValue().title;
-    const selectedCategories = this.categories().filter((cat) =>
-      this.selectedCategoryIds().has(cat.id)
-    );
-
-    if (this.task) {
-      this.modalCtrl.dismiss({
-        ...this.task,
-        title,
-        categories: selectedCategories,
-      });
-      return;
+    const result = await this.vm.submit();
+    if (result) {
+      this.modalCtrl.dismiss(result);
     }
-
-    const task = this.buildTaks(this.form.getRawValue());
-    await this.appendTaskUseCase.execute(task);
-    this.form.reset();
-    this.selectedCategoryIds.set(new Set());
   }
 
-  private async setCategories(): Promise<void> {
-    const categories = await this.getCategoriesUseCase.execute();
-    this.categories.set(categories);
-  }
-
-  private buildTaks(form: TaskFormValue): Task {
-    const selectedCategories = this.categories().filter((cat) =>
-      this.selectedCategoryIds().has(cat.id)
-    );
-    console.log({
-      id: Math.random(),
-      completed: false,
-      title: form.title,
-      categories: selectedCategories,
-    });
-    return {
-      id: Math.random(),
-      completed: false,
-      title: form.title,
-      categories: selectedCategories,
-    };
-  }
-
-  toggleCategory(id: number, checked: boolean) {
-    this.selectedCategoryIds.update((prev) => {
-      const next = new Set(prev);
-      checked ? next.add(id) : next.delete(id);
-      return next;
-    });
-  }
-
-  get hasSelectedCategories(): boolean {
-    return this.selectedCategoryIds().size > 0;
+  private setHeader(): void {
+    const { create, edit } = this.config.headers;
+    this.header = this.task ? edit : create;
   }
 }
