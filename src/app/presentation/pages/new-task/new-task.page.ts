@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Task } from '@core/domain';
 import {
   FormGroup,
@@ -7,7 +7,7 @@ import {
   FormControl,
   NonNullableFormBuilder,
 } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { AppendTaskUseCase } from '@core/domain/use-cases/tasks/append-task.use-case';
 
@@ -24,11 +24,23 @@ interface TaskFormValue {
 })
 export class NewTaskPage {
   form = this.buildForm();
+  public header: string = '';
+  @Input() task!: Task;
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private appendTaskUseCase: AppendTaskUseCase
+    private appendTaskUseCase: AppendTaskUseCase,
+    private modalCtrl: ModalController
   ) {}
+
+  ngOnInit() {
+    this.header = this.task ? 'Editar Tarea' : 'Creat Tarea';
+
+    if (this.task) {
+      console.log(this.task);
+      this.form.patchValue({ title: this.task.title });
+    }
+  }
 
   private buildForm(): FormGroup<{ title: FormControl<string> }> {
     return this.fb.group({
@@ -38,6 +50,13 @@ export class NewTaskPage {
 
   async submitForm() {
     if (this.form.invalid) return;
+
+    const title = this.form.getRawValue().title;
+
+    if (this.task) {
+      this.modalCtrl.dismiss({ ...this.task, title });
+      return;
+    }
 
     const task = this.buildTaks(this.form.getRawValue());
     await this.appendTaskUseCase.execute(task);

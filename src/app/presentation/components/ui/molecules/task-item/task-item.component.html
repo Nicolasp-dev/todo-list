@@ -1,8 +1,9 @@
 <ng-container>
-  <div class="task-item__container">
-    <ion-icon class="task-item__icon" name="add-circle-outline"></ion-icon>
-    <p>{{ title() }}</p>
+  <div class="task-item__container" (click)="onUpdate()">
+    <ion-icon class="task-item__icon" name="create-outline"></ion-icon>
+    <p>{{ task()?.title }}</p>
   </div>
+
   <app-checkbox
     [checked]="checked()"
     (checkedChange)="onCheckedChange($event)"

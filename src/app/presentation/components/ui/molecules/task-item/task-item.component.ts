@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CheckboxComponent } from '../../atoms/checkbox/checkbox.component';
 import { IonicModule, IonIcon } from '@ionic/angular';
+import { Task } from '@core/domain';
 
 @Component({
   selector: 'app-task-item',
@@ -17,22 +18,28 @@ import { IonicModule, IonIcon } from '@ionic/angular';
   styleUrls: ['task-item.component.scss'],
 })
 export class TaskItemComponent {
-  public title = input<string>();
+  public task = input<Task>();
   public checked = input<boolean>(false);
 
   @Output() checkedChange = new EventEmitter<boolean>();
+  @Output() editChange = new EventEmitter<number>();
 
   @HostBinding('class.task-item--checked') isChecked = false;
 
   constructor() {
-    // Sincroniza la clase desde el inicio y cada vez que `checked()` cambie
     effect(() => {
       this.isChecked = this.checked();
     });
   }
 
-  onCheckedChange(newValue: boolean) {
+  public onCheckedChange(newValue: boolean): void {
     this.checkedChange.emit(newValue);
     this.isChecked = newValue;
+  }
+
+  public onUpdate(): void {
+    if (this.isChecked) return;
+
+    this.editChange.emit(this.task()?.id);
   }
 }

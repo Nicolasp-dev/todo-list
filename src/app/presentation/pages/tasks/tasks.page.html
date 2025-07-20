@@ -19,11 +19,12 @@
       <ion-icon name="trash"></ion-icon>
     </ion-button>
 
-    @for (todo of todos(); track todo.id) {
+    @for (task of todos(); track task.id) {
     <app-task-item
-      [title]="todo.title"
-      [checked]="!!todo.completed"
-      (checkedChange)="toggleTodoChecked(todo.id, $event)"
+      [task]="task"
+      [checked]="!!task.completed"
+      (checkedChange)="toggleTodoChecked(task.id, $event)"
+      (editChange)="onEditTask($event)"
     ></app-task-item>
     }
   </div>

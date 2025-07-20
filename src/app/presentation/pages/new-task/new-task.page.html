@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Crear Tarea</ion-title>
+    <ion-title>{{ this.header }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,17 +13,6 @@
         placeholder="Ej.: Revisar Emails"
       ></ion-input>
     </ion-item>
-
-    <!--  <div class="icon-picker">
-      <ion-button
-        *ngFor="let icon of ['pricetag', 'book', 'briefcase', 'fitness']"
-        fill="outline"
-        [color]="selectedIcon === icon ? 'primary' : 'medium'"
-        (click)="selectIcon(icon)"
-      >
-        <ion-icon [name]="icon"></ion-icon>
-      </ion-button>
-    </div> -->
 
     <ion-button
       class="custom-button"
