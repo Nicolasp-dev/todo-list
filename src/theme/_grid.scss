@@ -7,7 +7,6 @@ $grid-top-padding: 56px;
   display: grid;
   grid-template-columns: repeat($grid-columns, 1fr);
   gap: $grid-gutter;
-  padding: $grid-top-padding $grid-margin 0 $grid-margin;
   box-sizing: border-box;
   padding-bottom: 100px;
 }

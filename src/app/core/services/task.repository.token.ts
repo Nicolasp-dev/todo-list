@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
-import { TaskRepository } from '@core/services';
+import { TasksRepository } from '@core/services';
 
-export const TASK_REPOSITORY = new InjectionToken<TaskRepository>(
-  'TODO_REPOSITORY'
+export const TASK_REPOSITORY = new InjectionToken<TasksRepository>(
+  'TASKS_REPOSITORY'
 );

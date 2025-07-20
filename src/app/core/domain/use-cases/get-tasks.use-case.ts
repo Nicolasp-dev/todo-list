@@ -1,10 +1,10 @@
 import { Task } from '@core/domain';
-import { TaskRepository } from '@core/services';
+import { TasksRepository } from '@core/services';
 
 export class GetTasksUseCase {
-  constructor(private todoRepo: TaskRepository) {}
+  constructor(private tasksRepository: TasksRepository) {}
 
-  execute(): Task[] {
-    return this.todoRepo.getTasks();
+  async execute(): Promise<Task[]> {
+    return this.tasksRepository.getTasks();
   }
 }

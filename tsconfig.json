@@ -25,7 +25,8 @@
     "useDefineForClassFields": false,
     "paths": {
       "@core/*": ["src/app/core/*"],
-      "@data/*": ["src/app/data/*"]
+      "@data/*": ["src/app/data/*"],
+      "@ui/*": ["src/app/presentation/components/ui/*"]
     }
   },
   "angularCompilerOptions": {

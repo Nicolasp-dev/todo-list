@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
+import { Task } from '@core/domain';
 import {
-  FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormControl,
+  NonNullableFormBuilder,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AppendTaskUseCase } from '@core/domain/use-cases/append-task.use-case';
+
+interface TaskFormValue {
+  title: string;
+}
 
 @Component({
   selector: 'app-new-task',
@@ -17,21 +23,31 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./new-task.page.scss'],
 })
 export class NewTaskPage {
-  taskForm: FormGroup;
+  taskForm = this.buildForm();
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.taskForm = this.fb.group({
-      title: ['', [Validators.required]],
+  constructor(
+    private fb: NonNullableFormBuilder,
+    private appendTaskUseCase: AppendTaskUseCase
+  ) {}
+
+  private buildForm(): FormGroup<{ title: FormControl<string> }> {
+    return this.fb.group({
+      title: ['', Validators.required],
     });
   }
 
-  submitForm() {
+  async submitForm() {
     if (this.taskForm.valid) {
-      const task = {
-        ...this.taskForm.value,
-        completed: false,
-      };
-      console.log('Nueva tarea:', task);
+      const task = this.buildTaks(this.taskForm.getRawValue());
+      await this.appendTaskUseCase.execute(task);
     }
+  }
+
+  private buildTaks(form: TaskFormValue): Task {
+    return {
+      id: Math.random(),
+      completed: false,
+      title: form.title,
+    };
   }
 }

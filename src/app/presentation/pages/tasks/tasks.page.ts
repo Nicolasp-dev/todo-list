@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { GetTasksUseCase, Task } from '@core/domain';
+import { DeleteCompletedTasksUseCase } from '@core/domain';
+import { Component, computed, signal } from '@angular/core';
+import { GetTasksUseCase, SaveTasksUseCase, Task } from '@core/domain';
 import { IonicModule } from '@ionic/angular';
-import { TaskItemComponent } from '../../components/ui/molecules/task-item/task-item.component';
+import { TaskItemComponent } from '@ui/molecules/task-item/task-item.component';
 
 @Component({
   selector: 'app-home',
@@ -13,17 +14,40 @@ import { TaskItemComponent } from '../../components/ui/molecules/task-item/task-
 export class TasksPage {
   todos = signal<Task[]>([]);
 
-  constructor(private getTodoUseCase: GetTasksUseCase) {}
+  constructor(
+    private readonly getTasksUseCase: GetTasksUseCase,
+    private readonly saveTasksUseCase: SaveTasksUseCase,
+    private readonly deleteCompletedTasksUseCase: DeleteCompletedTasksUseCase
+  ) {}
 
-  ngOnInit() {
-    this.todos.set(this.getTodoUseCase.execute());
+  async ngOnInit() {
+    this.loadTasks();
   }
 
-  toggleTodoChecked(id: number, newValue: boolean) {
+  ionViewWillEnter() {
+    this.loadTasks();
+  }
+
+  async toggleTodoChecked(id: number, newValue: boolean) {
     const current = this.todos();
     const updated = current.map((t) =>
       t.id === id ? { ...t, completed: newValue } : t
     );
     this.todos.set(updated);
+    await this.saveTasksUseCase.execute(updated);
+  }
+
+  readonly hasCheckedTasks = computed(() =>
+    this.todos().some((t) => t.completed)
+  );
+
+  async deleteTasks() {
+    const remaining = await this.deleteCompletedTasksUseCase.execute();
+    this.todos.set(remaining);
+  }
+
+  private async loadTasks() {
+    const tasks = await this.getTasksUseCase.execute();
+    this.todos.set(tasks);
   }
 }
