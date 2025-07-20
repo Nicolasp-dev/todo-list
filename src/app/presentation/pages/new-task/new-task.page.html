@@ -45,13 +45,11 @@
       </ion-list>
     </div>
 
-    <ion-button
-      class="primary-button button-wrapper"
-      [expand]="config.button.expand"
+    <app-button
+      [text]="config.button.text"
       [type]="config.button.type"
+      [expand]="config.button.expand"
       [disabled]="form.invalid"
-    >
-      {{ config.button.text }}
-    </ion-button>
+    ></app-button>
   </form>
 </ion-content>

@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { Task, Category } from '@core/domain';
 import { NewTaskViewModel } from './new-task.view-model';
 import { NewTaskConfig } from './new-task.config';
+import { ButtonComponent } from '@presentation/components/ui/atoms/button/button.component';
 
 @Component({
   selector: 'app-new-task',
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule, CommonModule],
+  imports: [IonicModule, ReactiveFormsModule, CommonModule, ButtonComponent],
   templateUrl: './new-task.page.html',
   styleUrls: ['./new-task.page.scss'],
   providers: [NewTaskViewModel],
