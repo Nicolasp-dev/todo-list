@@ -4,19 +4,25 @@ import { GetTasksUseCase, SaveTasksUseCase, Task } from '@core/domain';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { TaskItemComponent } from '@presentation/components/ui';
 import { NewTaskPage } from '../new-task/new-task.page';
-import { NgClass } from '@angular/common';
 import { FeatureFlagsService } from '@presentation/state';
+import { TasksPageConfig } from './tasks.config';
+import { IconButtonComponent } from '@presentation/components/ui/atoms/icon-button/icon-button.component';
+import { filterTasksByCategory } from '@core/utils/task-filter';
+import { updateTaskById } from '@core/utils/update-task-by-id';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'tasks.page.html',
   styleUrls: ['tasks.page.scss'],
   standalone: true,
-  imports: [IonicModule, TaskItemComponent, NgClass],
+  imports: [IonicModule, TaskItemComponent, IconButtonComponent],
 })
 export class TasksPage {
-  public readonly todos = signal<Task[]>([]);
-  public isCategoryFilterEnabled!: boolean;
+  public readonly config = TasksPageConfig;
+  public readonly tasks = signal<Task[]>([]);
+  public readonly searchCategory = signal('');
+  public isCategoryFilterEnabled =
+    this.featureFlagsService.categoryFilterEnabled;
 
   constructor(
     private readonly getTasksUseCase: GetTasksUseCase,
@@ -31,27 +37,32 @@ export class TasksPage {
   }
 
   public ionViewWillEnter(): void {
-    this.isCategoryFilterEnabled =
-      this.featureFlagsService.categoryFilterEnabled();
     this.loadTasks();
   }
 
   public readonly hasCheckedTasks = computed(() =>
-    this.todos().some((t) => t.completed)
+    this.tasks().some((t) => t.completed)
   );
+
+  public readonly filteredTasks = computed(() => {
+    return filterTasksByCategory(this.tasks(), this.searchCategory());
+  });
+
+  public onSearchCategory(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchCategory.set(input.value.trim().toLowerCase());
+  }
 
   public async toggleTodoChecked(
     id: number,
     completed: boolean
   ): Promise<void> {
-    const current = this.todos();
-    const updated = this.updatedTasks(current, id, completed);
-    this.todos.set(updated);
-    await this.saveTasksUseCase.execute(updated);
+    const tasks = updateTaskById(this.tasks(), id, { completed });
+    await this.updateTasks(tasks);
   }
 
   public async onEditTask(id: number): Promise<void> {
-    const task = this.todos().find((task) => task.id === id);
+    const task = this.tasks().find((task) => task.id === id);
     if (!task || task.completed) return;
 
     const modal = await this.modalCtrl.create({
@@ -60,7 +71,6 @@ export class TasksPage {
       initialBreakpoint: 0.8,
       breakpoints: [0, 0.25, 0.5, 0.9],
       showBackdrop: true,
-      cssClass: 'bottom-sheet-modal',
     });
 
     await modal.present();
@@ -68,46 +78,27 @@ export class TasksPage {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      const updatedTasks = this.todos().map((t) =>
-        t.id === id
-          ? { ...t, title: data.title, categories: data.categories }
-          : t
-      );
+      const tasks = updateTaskById(this.tasks(), id, {
+        title: data.title,
+        categories: data.categories,
+      });
 
-      this.todos.set(updatedTasks);
-      await this.saveTasksUseCase.execute(updatedTasks);
+      await this.updateTasks(tasks);
     }
   }
 
   public async deleteTasks(): Promise<void> {
     const remaining = await this.deleteCompletedTasksUseCase.execute();
-    this.todos.set(remaining);
+    this.tasks.set(remaining);
   }
 
   private async loadTasks(): Promise<void> {
     const tasks = await this.getTasksUseCase.execute();
-    this.todos.set(tasks);
+    this.tasks.set(tasks);
   }
 
-  private updatedTasks(tasks: Task[], id: number, completed: boolean): Task[] {
-    return tasks.map((task) =>
-      task.id === id ? { ...task, completed } : task
-    );
+  private async updateTasks(tasks: Task[]): Promise<void> {
+    this.tasks.set(tasks);
+    await this.saveTasksUseCase.execute(tasks);
   }
-
-  public readonly searchCategory = signal('');
-
-  public onSearchCategory(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.searchCategory.set(input.value.trim().toLowerCase());
-  }
-
-  public readonly filteredTasks = computed(() => {
-    const search = this.searchCategory();
-    if (!search) return this.todos();
-
-    return this.todos().filter((task) =>
-      task.categories?.some((c) => c.title.toLowerCase().includes(search))
-    );
-  });
 }

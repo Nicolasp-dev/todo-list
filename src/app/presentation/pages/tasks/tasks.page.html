@@ -1,33 +1,45 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Mis Tareas </ion-title>
+    <ion-title> {{ config.header}} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
   <div class="grid-container">
-    @if (isCategoryFilterEnabled) {
-    <ion-item class="search-bar">
-      <ion-icon name="search" slot="start"></ion-icon>
 
-      <ion-input
-        type="text"
-        placeholder="Buscar por categoría..."
-        clearInput
-        (ionInput)="onSearchCategory($event)"
-      ></ion-input>
-    </ion-item>
+    @if (filteredTasks().length === 0) {
+      <div class="empty-tasks">
+        <ion-text color="medium">
+          <h2>{{ config.emptyTasks.description }}</h2>
+        </ion-text>
+      </div>
+    } 
+
+    @else if (isCategoryFilterEnabled()) {
+      <ion-item class="search-bar">
+        <ion-icon
+          [name]="config.searchBar.icon.name"
+          [slot]="config.searchBar.icon.slot"
+        ></ion-icon>
+
+        <ion-input
+          [type]="config.searchBar.input.type"
+          [placeholder]="config.searchBar.input.placeholder"
+          clearInput
+          (ionInput)="onSearchCategory($event)"
+        ></ion-input>
+      </ion-item>
+    } 
+    
+    @if (filteredTasks().length > 0) {
+      <app-icon-button
+        class="trash-button"
+        [disabled]="!hasCheckedTasks()"
+        [isCategoryFilterEnabled]="isCategoryFilterEnabled()"
+        (clicked)="deleteTasks()"
+      ></app-icon-button>   
     }
-
-    <ion-button
-      class="custom-button"
-      [ngClass]="{ 'no-justify': !isCategoryFilterEnabled }"
-      [disabled]="!hasCheckedTasks()"
-      (click)="deleteTasks()"
-    >
-      <ion-icon name="trash"></ion-icon>
-    </ion-button>
-
+    
     @for (task of filteredTasks(); track task.id) {
     <app-task-item
       [task]="task"
