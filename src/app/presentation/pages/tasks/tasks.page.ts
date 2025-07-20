@@ -46,13 +46,13 @@ export class TasksPage {
 
   public async onEditTask(id: number): Promise<void> {
     const task = this.todos().find((task) => task.id === id);
-    if (!task) return;
+    if (!task || task.completed) return;
 
     const modal = await this.modalCtrl.create({
       component: NewTaskPage,
       componentProps: { task },
-      breakpoints: [0, 0.4, 0.9],
-      initialBreakpoint: 0.4,
+      initialBreakpoint: 0.8,
+      breakpoints: [0, 0.25, 0.5, 0.9],
       showBackdrop: true,
       cssClass: 'bottom-sheet-modal',
     });
@@ -62,9 +62,10 @@ export class TasksPage {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      debugger;
       const updatedTasks = this.todos().map((t) =>
-        t.id === id ? { ...t, title: data.title } : t
+        t.id === id
+          ? { ...t, title: data.title, categories: data.categories }
+          : t
       );
 
       this.todos.set(updatedTasks);
@@ -87,4 +88,20 @@ export class TasksPage {
       task.id === id ? { ...task, completed } : task
     );
   }
+
+  public readonly searchCategory = signal('');
+
+  public onSearchCategory(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchCategory.set(input.value.trim().toLowerCase());
+  }
+
+  public readonly filteredTasks = computed(() => {
+    const search = this.searchCategory();
+    if (!search) return this.todos();
+
+    return this.todos().filter((task) =>
+      task.categories?.some((c) => c.title.toLowerCase().includes(search))
+    );
+  });
 }

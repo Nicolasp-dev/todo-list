@@ -8,7 +8,12 @@
   <div class="grid-container">
     <ion-item class="search-bar">
       <ion-icon name="search" slot="start"></ion-icon>
-      <ion-input type="text" placeholder="Buscar..." clearInput></ion-input>
+      <ion-input
+        type="text"
+        placeholder="Buscar por categoría..."
+        clearInput
+        (ionInput)="onSearchCategory($event)"
+      ></ion-input>
     </ion-item>
 
     <ion-button
@@ -19,7 +24,7 @@
       <ion-icon name="trash"></ion-icon>
     </ion-button>
 
-    @for (task of todos(); track task.id) {
+    @for (task of filteredTasks(); track task.id) {
     <app-task-item
       [task]="task"
       [checked]="!!task.completed"

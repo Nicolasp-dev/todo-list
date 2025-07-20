@@ -1,15 +1,15 @@
 :host {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.2rem 1rem;
+  display: block;
+  padding: 0.5rem 1rem;
   border: 1px solid var(--ion-color-primary);
   border-radius: 5px;
   font-weight: bold;
   color: var(--ion-color-primary);
-  grid-column: span 4;
+  background-color: var(--ion-background-color);
   transition: background-color 0.3s ease, text-decoration 0.3s ease,
     border 0.3s ease;
+  margin-bottom: 0.75rem;
+  grid-column: span 4;
 }
 
 :host.task-item--checked {
@@ -18,15 +18,31 @@
   text-decoration: line-through;
 }
 
-.task-item__container {
+.task-item__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-item__header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 
 .task-item__icon {
   font-size: 1.2rem;
   color: var(--ion-text-color);
-  transition: color 0.3s ease;
+}
+
+.task-item__title {
+  flex: 1;
+  margin: 0;
+}
+
+.task-item__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }

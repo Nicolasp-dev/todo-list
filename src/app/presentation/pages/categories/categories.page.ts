@@ -1,17 +1,22 @@
-import { GetCategoriesUseCase } from './../../../core/domain/use-cases/categories/get-categories.use-case';
-import { AppendCategoryUseCase } from './../../../core/domain/use-cases/categories/append-category.use-case';
 import { Component, signal } from '@angular/core';
 import {
-  FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
   NonNullableFormBuilder,
   FormControl,
+  ValidationErrors,
+  AbstractControl,
+  ValidatorFn,
 } from '@angular/forms';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Category } from '@core/domain';
+import {
+  AppendCategoryUseCase,
+  GetCategoriesUseCase,
+  SaveCategoriesUseCase,
+} from '@core/domain/use-cases/categories';
 
 interface TaskFormValue {
   title: string;
@@ -29,69 +34,43 @@ export class CategoriesPage {
   form = this.buildForm();
 
   editMode = signal(false);
-  categoriesToDelete = signal<Set<number>>(new Set());
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private alertCtrl: AlertController,
     private appendCategoryUseCase: AppendCategoryUseCase,
-    private getCategoriesUseCase: GetCategoriesUseCase
+    private getCategoriesUseCase: GetCategoriesUseCase,
+    private saveCategoriesUseCase: SaveCategoriesUseCase,
+    private toastCtrl: ToastController
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadCategories();
   }
 
   public async addCategory(): Promise<void> {
     if (this.form.invalid) return;
 
-    const newCategory = this.buildTaks(this.form.getRawValue());
+    const newCategory = this.buildCategory(this.form.getRawValue());
     await this.appendCategoryUseCase.execute(newCategory);
 
     this.categories.update((prev) => [...prev, newCategory]);
     this.form.reset();
   }
 
-  deleteCategory(id: number) {
+  public deleteCategory(id: number) {
     this.categories.update((prev) => prev.filter((c) => c.id !== id));
-  }
-
-  async editCategory(category: Category) {
-    const alert = await this.alertCtrl.create({
-      header: 'Editar categoría',
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          placeholder: 'Nombre',
-          value: category.title,
-        },
-      ],
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Guardar',
-          handler: (data) => {
-            this.categories.update((prev) =>
-              prev.map((c) =>
-                c.id === category.id ? { ...c, name: data.name } : c
-              )
-            );
-          },
-        },
-      ],
-    });
-
-    await alert.present();
   }
 
   private buildForm(): FormGroup<{ title: FormControl<string> }> {
     return this.fb.group({
-      title: ['', Validators.required],
+      title: this.fb.control('', [
+        Validators.required,
+        this.duplicatedCategoryValidator(),
+      ]),
     });
   }
 
-  private buildTaks(form: TaskFormValue): Category {
+  private buildCategory(form: TaskFormValue): Category {
     return {
       id: Math.random(),
       title: form.title,
@@ -103,29 +82,21 @@ export class CategoriesPage {
     this.categories.set(categories);
   }
 
-  toggleEditMode() {
-    this.editMode.update((v) => !v);
-    console.log(this.editMode());
-    this.categoriesToDelete.set(new Set());
-  }
-
-  toggleCategoryForDeletion(id: number) {
-    const current = new Set(this.categoriesToDelete());
-    current.has(id) ? current.delete(id) : current.add(id);
-    this.categoriesToDelete.set(current);
-  }
-
-  async confirmDeleteSelected() {
-    const remaining = this.categories().filter(
-      (cat) => !this.categoriesToDelete().has(cat.id)
+  async deleteSelected(id: number) {
+    this.categories.update((prev) =>
+      prev.filter((category) => category.id !== id)
     );
-    this.categories.set(remaining);
-    // await this.saveCategoriesUseCase.execute(remaining);
-    this.editMode.set(false);
-    this.categoriesToDelete.set(new Set());
+    this.categories.set(this.categories());
+    await this.saveCategoriesUseCase.execute(this.categories());
   }
 
-  trackById(index: number, item: Category) {
-    return item.id;
+  private duplicatedCategoryValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const inputValue = control.value?.toLowerCase().trim();
+      const exists = this.categories().some(
+        (c) => c.title.toLowerCase().trim() === inputValue
+      );
+      return exists ? { duplicated: true } : null;
+    };
   }
 }

@@ -1,24 +1,44 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ this.header }}</ion-title>
+    <ion-title>{{ header }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="submitForm()" [formGroup]="form">
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <ion-label class="ion-padding-top"
+      ><strong>Selecciona una categoría</strong></ion-label
+    >
     <ion-item>
       <ion-input
         formControlName="title"
-        label="Titulo"
+        label="Título"
         placeholder="Ej.: Revisar Emails"
       ></ion-input>
     </ion-item>
+
+    <ion-label class="ion-padding-top"
+      ><strong>Selecciona una categoría</strong></ion-label
+    >
+
+    <ion-list>
+      @for (category of categories(); track category.id) {
+      <ion-item lines="none">
+        <ion-checkbox
+          slot="start"
+          [checked]="selectedCategoryIds().has(category.id)"
+          (ionChange)="toggleCategory(category.id, $event.detail.checked)"
+        ></ion-checkbox>
+        <ion-label>{{ category.title }}</ion-label>
+      </ion-item>
+      }
+    </ion-list>
 
     <ion-button
       class="custom-button"
       expand="block"
       type="submit"
-      [disabled]="form.invalid"
+      [disabled]="form.invalid || selectedCategoryIds().size === 0"
     >
       Guardar
     </ion-button>

@@ -1,11 +1,22 @@
 <ng-container>
-  <div class="task-item__container" (click)="onUpdate()">
-    <ion-icon class="task-item__icon" name="create-outline"></ion-icon>
-    <p>{{ task()?.title }}</p>
-  </div>
+  <div class="task-item__wrapper">
+    <div class="task-item__header">
+      <ion-icon
+        class="task-item__icon"
+        name="create-outline"
+        (click)="onUpdate()"
+      ></ion-icon>
+      <p class="task-item__title">{{ task()?.title }}</p>
+      <app-checkbox
+        [checked]="checked()"
+        (checkedChange)="onCheckedChange($event)"
+      />
+    </div>
 
-  <app-checkbox
-    [checked]="checked()"
-    (checkedChange)="onCheckedChange($event)"
-  />
+    <div class="task-item__categories">
+      @for (category of task()?.categories; track category.id) {
+      <ion-chip>{{ category.title }}</ion-chip>
+      }
+    </div>
+  </div>
 </ng-container>
