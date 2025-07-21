@@ -137,19 +137,6 @@ ionic cordova build ios
 
 ---
 
-## Esquema de Arquitectura
-
-La aplicación está organizada bajo arquitectura limpia
-
-- **Presentación**: Interfaz del usuario mediante Angular e Ionic.
-- **Aplicación**: Servicios, lógica central y reglas de negocio.
-- **Infraestructura**: Manejo de almacenamiento local, plugins y Firebase.
-- **Dominio**: Modelos de datos principales como la entidad `Task`.
-
----
-
----
-
 ## Pruebas
 
 Este proyecto utiliza **Jasmine** para pruebas unitarias.
