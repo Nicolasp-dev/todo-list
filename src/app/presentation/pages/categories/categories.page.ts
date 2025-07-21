@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CategoriesViewModel } from './categories.view-model';
+import { CategoriesViewModel } from './view-model/categories.view-model';
 import { CategoriesConfig } from './categories.config';
 import { ButtonComponent } from '@presentation/components/ui/atoms/button/button.component';
 
@@ -16,10 +16,12 @@ import { ButtonComponent } from '@presentation/components/ui/atoms/button/button
 })
 export class CategoriesPage {
   public config = CategoriesConfig;
-  public vm = inject(CategoriesViewModel);
   public isPageEnabled = true;
 
-  constructor(private readonly featureFlagsService: FeatureFlagsService) {}
+  constructor(
+    private featureFlagsService: FeatureFlagsService,
+    public vm: CategoriesViewModel
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.featureFlagsService.loadFlags();

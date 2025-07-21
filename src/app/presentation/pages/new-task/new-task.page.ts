@@ -3,7 +3,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Task, Category } from '@core/domain';
-import { NewTaskViewModel } from './new-task.view-model';
+import { NewTaskViewModel } from './view-model/new-task.view-model';
 import { NewTaskConfig } from './new-task.config';
 import { ButtonComponent } from '@presentation/components/ui/atoms/button/button.component';
 
