@@ -19,7 +19,6 @@ Este repositorio contiene una aplicación desarrollada con **Angular**, **Ionic*
 
 ### Búsqueda y Filtros
 
-- **Buscar Tareas**: Función de búsqueda integrada para encontrar tareas específicas por título.
 - **Filtrar por Categoría**: Permite ver tareas agrupadas según su categoría, facilitando el enfoque y la organización.
 
 ### Integración con Firebase
