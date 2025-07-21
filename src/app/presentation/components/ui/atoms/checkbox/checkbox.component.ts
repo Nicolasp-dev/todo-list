@@ -1,4 +1,11 @@
-import { Component, EventEmitter, input, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  input,
+  Output,
+  signal,
+} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -8,13 +15,13 @@ import { IonicModule } from '@ionic/angular';
   template: `<ion-checkbox
     class="custom-checkbox "
     label-placement="stacked"
-    [checked]="checked()"
+    [checked]="checked"
     (ionChange)="onChange($event)"
   ></ion-checkbox>`,
   styleUrls: ['./checkbox.component.scss'],
 })
 export class CheckboxComponent {
-  public checked = input<boolean>();
+  @Input() checked: boolean = false;
 
   @Output() checkedChange = new EventEmitter<boolean>();
 
