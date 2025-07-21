@@ -9,7 +9,7 @@ import { FeatureFlagsRepository } from '@core/services';
 @Injectable({ providedIn: 'root' })
 export class RemoteFeatureFlagsDatasource implements FeatureFlagsRepository {
   private remoteConfig = inject(RemoteConfig);
-  ////
+
   async isCategoriesPageEnabled(): Promise<boolean> {
     try {
       await fetchAndActivate(this.remoteConfig);
