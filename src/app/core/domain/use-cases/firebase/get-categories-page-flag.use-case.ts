@@ -1,9 +1,9 @@
 import { FeatureFlagsRepository } from '@core/services';
 
-export class GetCategoryFilterEnabledUseCase {
+export class GetCategoriesPageFlagUseCase {
   constructor(private repository: FeatureFlagsRepository) {}
 
   execute(): Promise<boolean> {
-    return this.repository.isCategoryFilterEnabled();
+    return this.repository.isCategoriesPageEnabled();
   }
 }

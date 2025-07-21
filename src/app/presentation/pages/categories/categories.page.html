@@ -4,37 +4,49 @@
   </ion-toolbar>
 </ion-header>
 
+@if (isPageEnabled) {
 <ion-content class="ion-padding" fullscreen>
   @if (vm.categories().length === 0) {
-  <ion-text color="medium">
-    <p>{{ config.emptyCategries }}</p>
-  </ion-text>
-  } @for (category of vm.categories(); track category.id) {
-  <ion-chip>
-    <ion-label>{{ category.title }}</ion-label>
-    <ion-icon
-      name="close-outline"
-      (click)="vm.deleteSelected(category.id)"
-      role="button"
-      aria-label="Eliminar categoría"
-    ></ion-icon>
-  </ion-chip>
-  }
+    <ion-text color="medium">
+      <p>{{ config.emptyCategries }}</p>
+    </ion-text>
+  } 
+  
+  @for (category of vm.categories(); track category.id) {
+    <ion-chip>
+      <ion-label>{{ category.title }}</ion-label>
+      <ion-icon
+        name="close-outline"
+        (click)="vm.deleteSelected(category.id)"
+        role="button"
+        aria-label="Eliminar categoría"
+      ></ion-icon>
+    </ion-chip>
+    }
 
-  <form (ngSubmit)="vm.addCategory()" [formGroup]="vm.form">
-    <ion-item>
-      <ion-input
-        [formControlName]="config.titleControl.formControlName"
-        [label]="config.titleControl.label"
-        [placeholder]="config.titleControl.placeholder"
-      ></ion-input>
-    </ion-item>
+    <form (ngSubmit)="vm.addCategory()" [formGroup]="vm.form">
+      <ion-item>
+        <ion-input
+          [formControlName]="config.titleControl.formControlName"
+          [label]="config.titleControl.label"
+          [placeholder]="config.titleControl.placeholder"
+        ></ion-input>
+      </ion-item>
 
-    <app-button
-      [text]="config.button.text"
-      [type]="config.button.type"
-      [expand]="config.button.expand"
-      [disabled]="vm.form.invalid"
-    ></app-button>
-  </form>
-</ion-content>
+      <app-button
+        [text]="config.button.text"
+        [type]="config.button.type"
+        [expand]="config.button.expand"
+        [disabled]="vm.form.invalid"
+      ></app-button>
+    </form>
+  </ion-content>
+} 
+
+@else {
+  <ion-content class="ion-padding" fullscreen>
+    <ion-text>
+      <h2>{{ config.remoteConfigText }}</h2>
+    </ion-text>
+  </ion-content>
+}

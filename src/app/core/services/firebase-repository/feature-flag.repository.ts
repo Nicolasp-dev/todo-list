@@ -1,3 +1,3 @@
 export abstract class FeatureFlagsRepository {
-  abstract isCategoryFilterEnabled(): Promise<boolean>;
+  abstract isCategoriesPageEnabled(): Promise<boolean>;
 }

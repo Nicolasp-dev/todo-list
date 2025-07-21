@@ -1,4 +1,4 @@
-// categories.page.ts
+import { FeatureFlagsService } from '@presentation/state';
 import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,8 +17,13 @@ import { ButtonComponent } from '@presentation/components/ui/atoms/button/button
 export class CategoriesPage {
   public config = CategoriesConfig;
   public vm = inject(CategoriesViewModel);
+  public isPageEnabled = true;
 
-  public ngOnInit(): void {
+  constructor(private readonly featureFlagsService: FeatureFlagsService) {}
+
+  async ngOnInit(): Promise<void> {
+    await this.featureFlagsService.loadFlags();
+    this.isPageEnabled = this.featureFlagsService.isCategoriesPageEnabled();
     this.vm.loadCategories();
   }
 }

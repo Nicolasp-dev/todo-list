@@ -12,4 +12,5 @@ export const CategoriesConfig = Object.freeze({
     type: 'submit',
     text: 'Guardar',
   },
+  remoteConfigText: 'Esta vista está deshabilitada desde Remote Config.',
 });

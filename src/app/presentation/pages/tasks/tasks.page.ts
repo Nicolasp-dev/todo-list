@@ -21,14 +21,11 @@ export class TasksPage {
   public readonly config = TasksPageConfig;
   public readonly tasks = signal<Task[]>([]);
   public readonly searchCategory = signal('');
-  public isCategoryFilterEnabled =
-    this.featureFlagsService.categoryFilterEnabled;
 
   constructor(
     private readonly getTasksUseCase: GetTasksUseCase,
     private readonly saveTasksUseCase: SaveTasksUseCase,
     private readonly deleteCompletedTasksUseCase: DeleteCompletedTasksUseCase,
-    private featureFlagsService: FeatureFlagsService,
     private modalCtrl: ModalController
   ) {}
 

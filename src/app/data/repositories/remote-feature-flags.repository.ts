@@ -8,7 +8,7 @@ export class RemoteFeatureFlagsRepository extends FeatureFlagsRepository {
     super();
   }
 
-  public isCategoryFilterEnabled(): Promise<boolean> {
-    return this.ds.isCategoryFilterEnabled();
+  public isCategoriesPageEnabled(): Promise<boolean> {
+    return this.ds.isCategoriesPageEnabled();
   }
 }

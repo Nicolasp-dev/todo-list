@@ -15,7 +15,8 @@
       </div>
     } 
 
-    @else if (isCategoryFilterEnabled()) {
+
+    @if (filteredTasks().length > 0) {
       <ion-item class="search-bar">
         <ion-icon
           [name]="config.searchBar.icon.name"
@@ -29,13 +30,10 @@
           (ionInput)="onSearchCategory($event)"
         ></ion-input>
       </ion-item>
-    } 
-    
-    @if (filteredTasks().length > 0) {
+
       <app-icon-button
         class="trash-button"
         [disabled]="!hasCheckedTasks()"
-        [isCategoryFilterEnabled]="isCategoryFilterEnabled()"
         (clicked)="deleteTasks()"
       ></app-icon-button>   
     }
